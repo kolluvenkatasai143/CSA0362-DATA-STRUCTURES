@@ -1,0 +1,74 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Structure of a stack node
+struct StackNode {
+    int data;
+    struct StackNode* next;
+};
+
+// Structure of a stack
+struct Stack {
+    struct StackNode* top;
+};
+
+// Create a new stack node
+struct StackNode* createStackNode(int data) {
+    struct StackNode* newNode = (struct StackNode*)malloc(sizeof(struct StackNode));
+    newNode->data = data;
+    newNode->next = NULL;
+    return newNode;
+}
+
+// Create a new stack
+struct Stack* createStack() {
+    struct Stack* stack = (struct Stack*)malloc(sizeof(struct Stack));
+    stack->top = NULL;
+    return stack;
+}
+
+// Push an element onto the stack
+void push(struct Stack* stack, int data) {
+    struct StackNode* newNode = createStackNode(data);
+    newNode->next = stack->top;
+    stack->top = newNode;
+}
+
+// Print the value at the top of the stack
+void printTop(struct Stack* stack) {
+    if (stack->top != NULL) {
+        printf("Top value: %d\n", stack->top->data);
+    } else {
+        printf("Stack is empty.\n");
+    }
+}
+
+// Add an element to the bottom of the stack
+void addToBottom(struct Stack* stack, int data) {
+    if (stack->top == NULL) {
+        push(stack, data);
+    } else {
+        struct StackNode* temp = stack->top;
+        while (temp->next != NULL) {
+            temp = temp->next;
+        }
+        struct StackNode* newNode = createStackNode(data);
+        temp->next = newNode;
+    }
+}
+
+int main() {
+    struct Stack* stack = createStack();
+    push(stack, 1);
+    push(stack, 2);
+    push(stack, 3);
+
+    printTop(stack); // Output: Top value: 3
+
+    addToBottom(stack, 0);
+    addToBottom(stack, -1);
+
+    printTop(stack); // Output: Top value: -1
+
+    return 0;
+}
