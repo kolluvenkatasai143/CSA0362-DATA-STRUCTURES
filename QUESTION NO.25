@@ -1,0 +1,74 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+struct Node {
+    char data;
+    struct Node* next;
+};
+
+struct Node* createNode(char data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = NULL;
+    return newNode;
+}
+
+void insert(struct Node** head, char data) {
+    struct Node* newNode = createNode(data);
+    if (*head == NULL) {
+        *head = newNode;
+        return;
+    }
+    struct Node* temp = *head;
+    while (temp->next != NULL) {
+        temp = temp->next;
+    }
+    temp->next = newNode;
+}
+
+bool isPalindromeUtil(struct Node** left, struct Node* right) {
+    if (right == NULL) {
+        return true;
+    }
+    
+    bool isPal = isPalindromeUtil(left, right->next);
+    if (!isPal) {
+        return false;
+    }
+    
+    bool isEqual = ((*left)->data == right->data);
+    *left = (*left)->next;
+    
+    return isEqual;
+}
+
+bool isPalindrome(struct Node* head) {
+    return isPalindromeUtil(&head, head);
+}
+
+int main() {
+    struct Node* head = NULL;
+    
+    insert(&head, 'r');
+    insert(&head, 'a');
+    insert(&head, 'd');
+    insert(&head, 'a');
+    insert(&head, 'r');
+    
+    printf("Linked List: ");
+    struct Node* temp = head;
+    while (temp != NULL) {
+        printf("%c -> ", temp->data);
+        temp = temp->next;
+    }
+    printf("NULL\n");
+    
+    if (isPalindrome(head)) {
+        printf("The linked list is a palindrome.\n");
+    } else {
+        printf("The linked list is not a palindrome.\n");
+    }
+    
+    return 0;
+}
