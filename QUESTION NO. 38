@@ -1,0 +1,30 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define TABLE_SIZE 10
+
+// Hash function using division
+int hash_division(int key) {
+    return key % TABLE_SIZE;
+}
+
+int main() {
+    int keys[] = {12, 25, 36, 49, 18, 10, 42};
+    int size = sizeof(keys) / sizeof(keys[0]);
+
+    int hash_table[TABLE_SIZE] = {0}; // Initialize hash table with 0s
+
+    // Insert keys into the hash table using division hashing
+    for (int i = 0; i < size; i++) {
+        int index = hash_division(keys[i]);
+        hash_table[index] = keys[i];
+    }
+
+    // Print the hash table
+    printf("Hash table using division hashing:\n");
+    for (int i = 0; i < TABLE_SIZE; i++) {
+        printf("Index %d: %d\n", i, hash_table[i]);
+    }
+
+    return 0;
+}
