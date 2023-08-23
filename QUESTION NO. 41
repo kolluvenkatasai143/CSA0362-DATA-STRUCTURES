@@ -1,0 +1,57 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX_NODES 100
+
+typedef struct {
+    int count;
+    int edges[MAX_NODES]; // Adjacency list or matrix
+} Graph;
+
+int visited[MAX_NODES] = {0};
+int path[MAX_NODES]; // To store the current path
+int path_index = 0;
+
+void dfs(Graph* graph, int node, int target) {
+    visited[node] = 1;
+    path[path_index++] = node;
+
+    if (node == target) {
+        // Print the path
+        for (int i = 0; i < path_index; ++i) {
+            printf("%d ", path[i]);
+        }
+        printf("\n");
+    }
+
+    for (int i = 0; i < graph->count; ++i) {
+        int neighbor = graph->edges[node][i];
+        if (!visited[neighbor]) {
+            dfs(graph, neighbor, target);
+        }
+    }
+
+    // Backtrack
+    path_index--;
+    visited[node] = 0;
+}
+
+int main() {
+    // Initialize and populate the graph
+    Graph graph;
+    graph.count = 6; // Number of nodes
+    
+    graph.edges[0].count = 2;
+    graph.edges[0].edges[0] = 1;
+    graph.edges[0].edges[1] = 2;
+
+    // Add other nodes' edges similarly...
+
+    int start = 0; // Starting node
+    int target = 2; // Target node
+
+    printf("Valid paths from %d to %d:\n", start, target);
+    dfs(&graph, start, target);
+
+    return 0;
+}
