@@ -1,0 +1,55 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX_NODES 100
+
+typedef struct {
+    int count;
+    int edges[MAX_NODES]; // Adjacency list or matrix
+} Graph;
+
+int visited[MAX_NODES] = {0};
+int result[MAX_NODES];
+int result_index = 0;
+
+void dfs(Graph* graph, int node) {
+    visited[node] = 1;
+    
+    for (int i = 0; i < graph->count; ++i) {
+        int neighbor = graph->edges[node][i];
+        if (!visited[neighbor]) {
+            dfs(graph, neighbor);
+        }
+    }
+    
+    result[result_index++] = node;
+}
+
+void topologicalSort(Graph* graph) {
+    for (int i = 0; i < graph->count; ++i) {
+        if (!visited[i]) {
+            dfs(graph, i);
+        }
+    }
+}
+
+int main() {
+    // Initialize and populate the graph
+    Graph graph;
+    graph.count = 6; // Number of nodes
+    
+    graph.edges[0].count = 2;
+    graph.edges[0].edges[0] = 1;
+    graph.edges[0].edges[1] = 2;
+
+    // Add other nodes' edges similarly...
+
+    topologicalSort(&graph);
+    
+    // Print the result array in reverse order for topological order
+    for (int i = result_index - 1; i >= 0; --i) {
+        printf("%d ", result[i]);
+    }
+
+    return 0;
+}
