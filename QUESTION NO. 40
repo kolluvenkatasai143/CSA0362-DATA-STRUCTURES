@@ -1,0 +1,89 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Define the maximum number of vertices
+#define MAX_VERTICES 100
+
+// Structure to represent a node in the adjacency list
+typedef struct Node {
+    int vertex;
+    struct Node* next;
+} Node;
+
+// Structure to represent the adjacency list
+typedef struct {
+    Node* head;
+} AdjList;
+
+// Structure to represent the graph
+typedef struct {
+    int numVertices;
+    AdjList* array;
+} Graph;
+
+// Function to create a new node
+Node* createNode(int vertex) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    newNode->vertex = vertex;
+    newNode->next = NULL;
+    return newNode;
+}
+
+// Function to create a graph with given number of vertices
+Graph* createGraph(int numVertices) {
+    Graph* graph = (Graph*)malloc(sizeof(Graph));
+    graph->numVertices = numVertices;
+    graph->array = (AdjList*)malloc(numVertices * sizeof(AdjList));
+    
+    for (int i = 0; i < numVertices; ++i) {
+        graph->array[i].head = NULL;
+    }
+    
+    return graph;
+}
+
+// Function to add an edge to the graph
+void addEdge(Graph* graph, int src, int dest) {
+    Node* newNode = createNode(dest);
+    newNode->next = graph->array[src].head;
+    graph->array[src].head = newNode;
+    
+    newNode = createNode(src);
+    newNode->next = graph->array[dest].head;
+    graph->array[dest].head = newNode;
+}
+
+// Function to print the graph's adjacency list representation
+void printGraph(Graph* graph) {
+    for (int i = 0; i < graph->numVertices; ++i) {
+        Node* current = graph->array[i].head;
+        printf("Adjacency list of vertex %d: ", i);
+        while (current) {
+            printf("%d -> ", current->vertex);
+            current = current->next;
+        }
+        printf("NULL\n");
+    }
+}
+
+int main() {
+    int numVertices = 6; // Change this as needed
+    Graph* graph = createGraph(numVertices);
+
+    // Add edges to the graph
+    addEdge(graph, 0, 1);
+    addEdge(graph, 0, 3);
+    addEdge(graph, 1, 2);
+    addEdge(graph, 1, 3);
+    addEdge(graph, 2, 3);
+    addEdge(graph, 3, 4);
+    addEdge(graph, 4, 5);
+
+    // Print the adjacency list representation of the graph
+    printGraph(graph);
+
+    // Clean up
+    free(graph);
+    
+    return 0;
+}
